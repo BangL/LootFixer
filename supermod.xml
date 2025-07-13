@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<mod name="LootFixer"
+     description="Removes unreachable loot from enigmatic, rolling stock, blinding heimdall, urgent delivery, firestarter and extraction."
+     priority="900"
+     author="BangL"
+     contact="https://steamcommunity.com/id/BangL"
+     version="0.3.1"
+     color="60 60 60">
+    <updates>
+        <update provider="modworkshop"
+                identifier="50232" />
+    </updates>
+    <hooks>
+        <pre hook_id="lib/entry"
+             script_path="LootFixer.lua" />
+        <post hook_id="lib/units/pickups/greedcacheitem"
+              script_path="lua/GreedCacheItem.lua" />
+        <post hook_id="lib/units/pickups/greeditem"
+              script_path="lua/GreedItem.lua" />
+        <post hook_id="lib/units/pickups/loot"
+              script_path="lua/Loot.lua" />
+        <post hook_id="lib/units/interactions/interactionext"
+              script_path="lua/SecretDocumentInteractionExt.lua" />
+    </hooks>
+</mod>
