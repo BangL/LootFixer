@@ -4,11 +4,12 @@
      priority="900"
      author="BangL"
      contact="https://steamcommunity.com/id/BangL"
-     version="0.3.1"
+     version="0.3.2"
      color="60 60 60">
     <updates>
-        <update provider="modworkshop"
-                identifier="50232" />
+        <update identifier="lootfixer">
+            <host meta="https://raw.githubusercontent.com/BangL/raid-mods-meta/main/lootfixer.json"/>
+        </update>
     </updates>
     <hooks>
         <pre hook_id="lib/entry"
