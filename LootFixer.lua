@@ -8,7 +8,7 @@ if not LootFixer.setup then
 
         -- Full Stop
         forest_bunker = {
-            [105148] = true, -- small loot in unreachable box
+            [105147] = true, -- small loot in unreachable box
         },
 
         -- Enigmatic
