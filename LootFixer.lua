@@ -382,10 +382,81 @@ if not LootFixer.setup then
         },
     }
 
-    function LootFixer:IsUnitValid(unit)
-        local job_id = (managers.raid_job:current_job() and managers.raid_job:current_job().job_type == OperationsTweakData.JOB_TYPE_OPERATION)
+    -- Loot that is only reachable when a random door pair is open.
+    -- Removed right before GreedManager:plant_greed_items_on_level, as the
+    -- randoms have run by then (unlike at on_load_complete).
+    LootFixer.DOOR_AREAS = {
+        -- Tiger Trap
+        tnd = {
+            -- ElementDisableUnit (sewer_entrance_*) executed by the random -> area with open doors
+            open = {
+                [101739] = "n", -- ss, doors 141 + 143
+                [100119] = "w", -- se, doors 144 + 146
+                [101740] = "w", -- ne, doors 144 + 146
+                [101741] = "s", -- nn, doors 142 + 145 (no loot)
+            },
+            items = {
+                -- north: between doors 141 and 143
+                [100567] = "n",
+                [100483] = "n",
+                [100568] = "n",
+                [100584] = "n",
+                [100480] = "n",
+                [100484] = "n",
+                -- north: sewers in front of door 141
+                [100482] = "n",
+                [100583] = "n",
+                [100481] = "n",
+                -- west: between doors 144 and 146
+                [100580] = "w",
+                [100479] = "w",
+                [100563] = "w",
+                [100564] = "w",
+                [100581] = "w",
+                -- west: sewers in front of door 144
+                [100565] = "w",
+                [100566] = "w",
+                [100582] = "w",
+            },
+        },
+    }
+
+    function LootFixer:GetJobId()
+        return (managers.raid_job:current_job() and managers.raid_job:current_job().job_type == OperationsTweakData.JOB_TYPE_OPERATION)
             and managers.raid_job:current_operation_event().mission_id
             or managers.raid_job:current_job_id()
+    end
+
+    function LootFixer:RemoveClosedAreaLoot(greed, world_id)
+        local areas = self.DOOR_AREAS[self:GetJobId()]
+        local mission = managers.worldcollection._missions[world_id]
+        if not (areas and mission) then
+            return
+        end
+        local open_area
+        for _, script in pairs(mission._scripts) do
+            for element_id, area in pairs(areas.open) do
+                local element = script._elements[element_id]
+                if element and element._has_executed then
+                    open_area = area
+                end
+            end
+        end
+        if not open_area then
+            return
+        end
+        for _, item in ipairs(greed._registered_greed_items[world_id] or {}) do
+            if alive(item.unit) then
+                local area = areas.items[item.unit:editor_id() % 1000000]
+                if area and area ~= open_area then
+                    item.unit:set_slot(0)
+                end
+            end
+        end
+    end
+
+    function LootFixer:IsUnitValid(unit)
+        local job_id = self:GetJobId()
         local editor_id = unit:editor_id() % 1000000
         if self.IGNORE_IDS[job_id] and (self.IGNORE_IDS[job_id][editor_id]) then
             return false
