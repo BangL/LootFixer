@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<mod name="LootFixer"
+<mod name="LootFixer" image="icon.png"
      description="Removes unreachable loot from enigmatic, rolling stock, blinding heimdall, urgent delivery, firestarter, extraction and tiger trap."
      priority="900"
      author="BangL"
