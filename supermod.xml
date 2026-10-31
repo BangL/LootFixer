@@ -8,7 +8,7 @@
      color="60 60 60">
     <updates>
         <update identifier="lootfixer">
-            <host meta="https://raw.githubusercontent.com/BangL/raid-mods-meta/main/lootfixer.json"/>
+            <host meta="https://raw.githubusercontent.com/BangL/raid-mods-meta/main/lootfixer.json" patchnotes="https://github.com/BangL/LootFixer/blob/master/CHANGELOG.md"/>
         </update>
     </updates>
     <hooks>
